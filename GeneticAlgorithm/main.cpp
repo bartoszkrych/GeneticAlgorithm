@@ -1,7 +1,8 @@
 #include <iostream>
 #include <random>
-
 using namespace std;
+
+#include "CKnapsackProblem.h"
 
 int generateNumber(int from,int to)
 {
@@ -113,6 +114,7 @@ void estimate(int *** populations, int countPop, int *** items, int countItems, 
 
 int main()
 {
+	/*
 	int popSize=4;//size of population
 	int crossProb;// cross prob
 	int mutProb;; //mutation prob
@@ -129,6 +131,7 @@ int main()
 	cout << endl;
 	//displayValues(&populationsT, popSize, &itemsT, countItems);
 	estimate(&populationsT, popSize, &itemsT, countItems,backpackSize);
+	*/
 
 	system("pause");
 
