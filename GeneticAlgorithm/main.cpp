@@ -78,8 +78,10 @@ void displayValues(int *** populations, int countPop, int *** items, int countIt
 
 void estimate(int *** populations, int countPop, int *** items, int countItems, int size)
 {
-	int value = 0;
 	int weight = 0;
+	int fitness = 0;
+	int indi_1 = generateNumber(0, countPop - 1);
+	int indi_2 = generateNumber(0, countPop - 1);
 	for (int i = 0; i < countPop; i++)
 	{
 		cout << i + 1 << ": ";
@@ -88,22 +90,25 @@ void estimate(int *** populations, int countPop, int *** items, int countItems, 
 			cout << (*populations)[i][j];
 			if ((*populations)[i][j] == 1)
 			{
-				value += (*items)[j][0];
+				fitness += (*items)[j][0];
 				weight += (*items)[j][1];
 			}
 		}
-		cout << ", value:" << value << ", weight:" << weight<<"	";
-		if(value>size)
+		if (weight > size)
 		{
-			cout << "BAD";
-		}else
+			fitness=0;
+		}
+		cout << ", value:" << weight << ", fitness:" << fitness;
+		if(i == indi_1 || i == indi_2)
 		{
-			cout << "OK";
+			cout << " <-";
 		}
 		cout << endl;
-		value = 0;
+		fitness = 0;
 		weight = 0;
 	}
+		cout << endl;
+	
 }
 
 int main()
@@ -118,17 +123,6 @@ int main()
 	generatePopulation(&populationsT, popSize, countItems);
 	generateItems(&itemsT, 5, 4, countItems);
 
-/*
-	piTable = new int*[popSize];
-	for (int i = 0; i < popSize; i++)
-	{
-		piTable[i] = new int[4];
-		for (int j = 0; j < 4; j++)
-		{
-			piTable[i][j] = i+j;
-		}
-	}
-*/
 	display(&populationsT, 4, countItems);
 	cout << endl << "i |v|w|"<<endl;
 	display(&itemsT, 2, countItems);
