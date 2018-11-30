@@ -13,10 +13,10 @@ CKnapsackProblem::CKnapsackProblem()
 	d_knapsack_size = DEFAULT_KNAPSACK;
 	i_items_count = DEFAULT_SIZE;
 
-	pi_items_table = new int*[i_items_count];
+	pi_items_table = new double*[i_items_count];
 	for (int i = 0; i < i_items_count; i++)
 	{
-		pi_items_table[i] = new int[2];
+		pi_items_table[i] = new double[2];
 		pi_items_table[i][0] = dGenerateDouble(0.01, DEFAULT_VALUES);
 		pi_items_table[i][1] = dGenerateDouble(0.01, DEFAULT_VALUES);
 	}
@@ -27,10 +27,10 @@ CKnapsackProblem::CKnapsackProblem(double dKnapsackSize, int iItemsCount, double
 	d_knapsack_size = dKnapsackSize;
 	i_items_count = iItemsCount;
 
-	pi_items_table = new int*[i_items_count];
+	pi_items_table = new double*[i_items_count];
 	for (int i = 0; i < i_items_count; i++)
 	{
-		pi_items_table[i] = new int[2];
+		pi_items_table[i] = new double[2];
 		pi_items_table[i][0] = dGenerateDouble(0.01, dMaxValueItm);
 		pi_items_table[i][1] = dGenerateDouble(0.01, dMaxSizeItm);
 	}
@@ -41,10 +41,10 @@ CKnapsackProblem::CKnapsackProblem(double dKnapsackSize, int iItemsCount)
 	d_knapsack_size = dKnapsackSize;
 	i_items_count = iItemsCount;
 
-	pi_items_table = new int*[i_items_count];
+	pi_items_table = new double*[i_items_count];
 	for (int i = 0; i < i_items_count; i++)
 	{
-		pi_items_table[i] = new int[2];
+		pi_items_table[i] = new double[2];
 		pi_items_table[i][0] = dGenerateDouble(0.01, DEFAULT_VALUES);
 		pi_items_table[i][1] = dGenerateDouble(0.01, DEFAULT_VALUES);
 	}
@@ -61,20 +61,19 @@ CKnapsackProblem::~CKnapsackProblem()
 }
 
 
-
-bool CKnapsackProblem::bSetNewValueOfItm(int iIndex, int iValue)
+bool CKnapsackProblem::bSetNewValueOfItm(int iIndex, double iValue)
 {
 	if (iIndex >= d_knapsack_size || iIndex < 0) return false;
 
-	pi_items_table[iIndex][0] = iValue;
+	pi_items_table[iIndex][0] = round(iValue * 100) / 100;
 	return true;
 }
 
-bool CKnapsackProblem::bSetNewSizeOfItm(int iIndex, int iSize)
+bool CKnapsackProblem::bSetNewSizeOfItm(int iIndex, double iSize)
 {
 	if (iIndex >= d_knapsack_size || iIndex < 0) return false;
 
-	pi_items_table[iIndex][1] = iSize;
+	pi_items_table[iIndex][1] = round(iSize * 100) / 100;
 	return true;
 }
 
@@ -108,6 +107,16 @@ double CKnapsackProblem::dGetKnapsackSize()
 	return d_knapsack_size;
 }
 
+void CKnapsackProblem::display()
+{
+	cout << "Capacity:	" << d_knapsack_size << endl <<"Count of items:	"<< i_items_count<<endl<<endl << "i|v	|s"<<endl;
+		for (int j = 0; j < i_items_count; j++)
+		{
+			cout <<j<<"|"<<pi_items_table[j][0] << "	|"<< pi_items_table[j][1]<<endl;
+		}
+		cout << endl;
+}
+
 
 double CKnapsackProblem::dGenerateDouble(double dFrom, double dTo)
 {
@@ -115,7 +124,7 @@ double CKnapsackProblem::dGenerateDouble(double dFrom, double dTo)
 	std::mt19937 gen(rd()); //Standard mersenne_twister_engine seeded with rd()
 	std::uniform_real_distribution<> dis(dFrom, dTo);
 	
-	return dis(gen);
+	return round(dis(gen) * 100) / 100;
 }
 
 int CKnapsackProblem::iGenerateInteger(int iFrom, int iTo)

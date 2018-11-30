@@ -1,5 +1,6 @@
 #include <iostream>
 #include <random>
+#include "CIndividual.h"
 using namespace std;
 
 #include "CKnapsackProblem.h"
@@ -132,6 +133,27 @@ int main()
 	//displayValues(&populationsT, popSize, &itemsT, countItems);
 	estimate(&populationsT, popSize, &itemsT, countItems,backpackSize);
 	*/
+	int items = 4;
+	CKnapsackProblem* knap = new CKnapsackProblem(7.5,4);
+
+	knap->display();
+
+	CIndividual* indi = new CIndividual(knap);
+
+	indi->display();
+
+	CIndividual* indi2 = new CIndividual(knap);
+
+	indi2->display();
+
+	vector<CIndividual*> kids = indi->vCrossing(indi2);
+
+	cout << "KIDS:"<<endl;
+	for(int i = 0; i < kids.size(); i++)
+	{
+		kids[i]->display();
+		cout << endl;
+	}
 
 	system("pause");
 

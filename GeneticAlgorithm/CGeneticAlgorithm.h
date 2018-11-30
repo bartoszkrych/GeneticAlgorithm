@@ -5,18 +5,20 @@
 class CGeneticAlgorithm
 {
 public:
-	CGeneticAlgorithm(int iPopulationSize, double dMutationProb, double dCrossProb, int iStopIteration);
+	CGeneticAlgorithm(int iPopulationSize, double dMutationProb, double dCrossProb,CKnapsackProblem * c_knapsack_problem);
 	~CGeneticAlgorithm();
 
-	static double dGetMutationProb();
-	static double dGetCrossProb();
+	double dGetMutationProb();
+	double dGetCrossProb();
 	
 private:
 	int i_population_size;
-	static double d_mutation_prob;
-	static double d_cross_prob;
-	int i_stop_iteration;
+	double d_mutation_prob;
+	double d_cross_prob;
+	//int i_stop_iteration;
 
+	CIndividual ** c_tab_population;
 	CIndividual * c_best_individual;
+	CKnapsackProblem * c_knapsack_problem;
 };
 
