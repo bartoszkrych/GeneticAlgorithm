@@ -103,11 +103,10 @@ int CKnapsackProblem::iGetItemsCount()
 	return i_items_count;
 }
 
-double CKnapsackProblem::iGetKnapsackSize()
+double CKnapsackProblem::dGetKnapsackSize()
 {
 	return d_knapsack_size;
 }
-
 
 
 double CKnapsackProblem::dGenerateDouble(double dFrom, double dTo)

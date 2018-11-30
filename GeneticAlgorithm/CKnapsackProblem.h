@@ -14,7 +14,7 @@ public:
 	double dGetSizeFromGen(int ** piTable);
 
 	int iGetItemsCount();
-	double iGetKnapsackSize();
+	double dGetKnapsackSize();
 private:
 	//void generateItems(int maxValue, int maxSize, int countItems);
 	int iGenerateInteger(int iFrom, int iTo);
