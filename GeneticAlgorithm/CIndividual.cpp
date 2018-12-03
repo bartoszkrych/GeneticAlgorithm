@@ -82,6 +82,12 @@ std::vector<CIndividual*> CIndividual::vCrossing(CIndividual* cSecondParent)
 	}
 	v_children.push_back(new CIndividual(c_knapsack, pi_table[0]));
 	v_children.push_back(new CIndividual(c_knapsack, pi_table[1]));
+
+	for(int i = 0; i < 2; i++)
+	{
+		delete[] pi_table[i];
+	}
+	delete[] pi_table;
 	return v_children;
 }
 

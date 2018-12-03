@@ -8,25 +8,32 @@ CGeneticAlgorithm::CGeneticAlgorithm(int iPopulationSize, double dMutationProb, 
 	i_population_size = iPopulationSize;
 	d_mutation_prob = dMutationProb;
 	d_cross_prob = dCrossProb;
-	c_knapsack_problem = cKnapsackProblem;
-	c_tab_population = new CIndividual*[i_population_size];
+	pc_knapsack_problem = cKnapsackProblem;
+	ppc_tab_population = new CIndividual*[i_population_size];
 	for (int i = 0; i < i_population_size; i++)
 	{
-		c_tab_population[i] = new CIndividual(c_knapsack_problem);
+		ppc_tab_population[i] = new CIndividual(pc_knapsack_problem);
 	}
-	c_best_individual = c_tab_population[0];
+	pc_best_individual = ppc_tab_population[0];
 	for(int i = 1 ; i < i_population_size;i++)
 	{
-		if(c_tab_population[i]->dGetFitness()>c_best_individual->dGetFitness())
+		if(ppc_tab_population[i]->dGetFitness()>pc_best_individual->dGetFitness())
 		{
-			c_best_individual = c_tab_population[i];
+			pc_best_individual = ppc_tab_population[i];
 		}
 	}
 }
+
 CGeneticAlgorithm::~CGeneticAlgorithm()
 {
-	delete[] c_tab_population;
-	delete c_best_individual;
+	for (int i = 0; i<i_population_size; i++)
+	{
+		if(ppc_tab_population[i]!=pc_best_individual)
+		delete ppc_tab_population[i];
+	}
+
+	delete[] ppc_tab_population;
+	delete pc_best_individual;
 }
 
 void CGeneticAlgorithm::vStartAlgorithm(int iIter)
@@ -41,26 +48,24 @@ void CGeneticAlgorithm::vStartAlgorithm(int iIter)
 	std::cout << "###	POP	###" << std::endl;
 	for (int i = 0; i < i_population_size; i++)
 	{
-		c_tab_population[i]->display();
+		ppc_tab_population[i]->display();
 	}
-	std::cout << "THE BEST IS: "<< std::endl; c_best_individual->display();
+	std::cout << "THE BEST IS: "<< std::endl; pc_best_individual->display();
 
 }//CGeneticAlgorithm::vGeneratePopulation(int iIter)
+
 void CGeneticAlgorithm::vGenerateNewPopulation()
 {
 	std::cout << "###	POP	###"<< std::endl;
 	for (int i = 0; i < i_population_size; i++)
 	{
-		c_tab_population[i]->display();
+		ppc_tab_population[i]->display();
 	}
 	int i_random_number1;
 	int i_random_number2;
 	int i_children_count = 0;
-	int i_index_best = -1;
 
 	CIndividual ** pc_new_population = new CIndividual*[i_population_size];
-
-	bool b_is_offspring = false;
 
 	while (i_children_count < i_population_size)
 	{
@@ -76,22 +81,21 @@ void CGeneticAlgorithm::vGenerateNewPopulation()
 				i_random_number2 = iGenerateInteger(0, i_population_size - 1);
 			}
 
-			if (c_tab_population[i_random_number1]->dGetFitness() >= c_tab_population[i_random_number2]->dGetFitness())
+			if (ppc_tab_population[i_random_number1]->dGetFitness() >= ppc_tab_population[i_random_number2]->dGetFitness())
 			{
 				pi_parents[i] = i_random_number1;
 			}
-			else//if(c_tab_population[i_random_number1]->dGetFitness() >= c_tab_population[i_random_number2]->dGetFitness())
+			else//if(ppc_tab_population[i_random_number1]->dGetFitness() >= ppc_tab_population[i_random_number2]->dGetFitness())
 			{
 				pi_parents[i] = i_random_number2;
-			} // ELSE c_tab_population[i_random_number1]->dGetFitness() >= c_tab_population[i_random_number2]->dGetFitness())
+			} // ELSE ppc_tab_population[i_random_number1]->dGetFitness() >= ppc_tab_population[i_random_number2]->dGetFitness())
 		}//	for(int i = 0; i < 2; i++)
 
 		double d_crossing = dGenerateDouble(0, 1);
 
 		if (d_crossing <= d_cross_prob)
 		{
-			//b_is_offspring = true;
-			std::vector <CIndividual*> children = c_tab_population[pi_parents[0]]->vCrossing(c_tab_population[pi_parents[1]]);
+			std::vector <CIndividual*> children = ppc_tab_population[pi_parents[0]]->vCrossing(ppc_tab_population[pi_parents[1]]);
 			children[0]->vMutation(d_mutation_prob);
 			pc_new_population[i_children_count++] = children[0];
 			if(i_children_count==i_population_size)
@@ -108,34 +112,40 @@ void CGeneticAlgorithm::vGenerateNewPopulation()
 
 	for (int i = 0; i < i_population_size; i++)
 	{
-		if (c_best_individual == c_tab_population[i]) c_tab_population[i]=NULL;
+		if (pc_best_individual == ppc_tab_population[i]) ppc_tab_population[i]=NULL;
 	}//for (int i = 0; i < i_population_size; i++)
 
-	delete[] c_tab_population;
-	//c_tab_population = NULL;
-	c_tab_population = pc_new_population;
-	i_index_best = -1;
+	for (int i = 0; i < i_population_size; i++)
+	{
+		if (ppc_tab_population[i] != pc_best_individual)
+			delete ppc_tab_population[i];
+	}
+	delete[] ppc_tab_population;
+	ppc_tab_population = NULL;
+	ppc_tab_population = pc_new_population;
+
+	int i_index_best = -1;
 	double d_fitness_best = -1;
 	for (int i = 0; i < i_population_size;i++)
 	{
-		if (c_tab_population[i]->dGetFitness() > d_fitness_best) {
+		if (ppc_tab_population[i]->dGetFitness() > d_fitness_best) {
 			i_index_best = i;
-			d_fitness_best = c_tab_population[i]->dGetFitness();
+			d_fitness_best = ppc_tab_population[i]->dGetFitness();
 		}
 	}//for (int i = 1; i < i_population_size;i++)
+	
+	bMatchBestIndividual(ppc_tab_population[i_index_best]);
 
-	if (i_index_best != -1) bMatchBestIndividual(c_tab_population[i_index_best]);
 
-
-	//std::cout << std::endl << c_best_individual->dGetFitness();
+	//std::cout << std::endl << pc_best_individual->dGetFitness();
 }
 
 bool CGeneticAlgorithm::bMatchBestIndividual(CIndividual* cToMatch)
 {
-	if(cToMatch->dGetFitness()>c_best_individual->dGetFitness())
+	if(cToMatch->dGetFitness()>pc_best_individual->dGetFitness())
 	{
-		delete c_best_individual;
-		c_best_individual = cToMatch;
+		delete pc_best_individual;
+		pc_best_individual = cToMatch;
 		return true;
 	}
 	return false;

@@ -19,10 +19,9 @@ private:
 	int i_population_size;
 	double d_mutation_prob;
 	double d_cross_prob;
-	//int i_stop_iteration;
 
-	CIndividual ** c_tab_population;
-	CIndividual * c_best_individual;
-	CKnapsackProblem * c_knapsack_problem;
+	CIndividual ** ppc_tab_population;
+	CIndividual * pc_best_individual;
+	CKnapsackProblem * pc_knapsack_problem;
 };
 
