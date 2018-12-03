@@ -6,10 +6,10 @@ class CIndividual
 {
 public:
 	CIndividual(CKnapsackProblem* cKnapsack);
-	CIndividual(CKnapsackProblem* cKnapsack, int ** piTable);
+	CIndividual(CKnapsackProblem* cKnapsack, int * piTable);
 	~CIndividual();
 
-	void vMutation();
+	void vMutation(double dMutationProb);
 	std::vector<CIndividual*> vCrossing(CIndividual* cSecondParent);
 
 	double dGetFitness();
@@ -27,6 +27,7 @@ private:
 	int i_size_genotype;
 	double d_fitness;
 	double d_value_gen;
+	double d_size;
 
 	CKnapsackProblem* c_knapsack;
 };

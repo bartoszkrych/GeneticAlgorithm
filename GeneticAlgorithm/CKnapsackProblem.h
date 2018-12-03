@@ -10,8 +10,8 @@ public:
 	bool bSetNewValueOfItm(int iIndex, double iValue);
 	bool bSetNewSizeOfItm(int iIndex, double iSize);
 //	bool bSetNewSizeOfItmTable(int iIndex, int iSize);
-	double dGetValueFromGen(int ** piTable);
-	double dGetSizeFromGen(int ** piTable);
+	double dGetValueFromGen(int * piTable);
+	double dGetSizeFromGen(int * piTable);
 
 	int iGetItemsCount();
 	double dGetKnapsackSize();
@@ -23,6 +23,6 @@ private:
 	double dGenerateDouble(double iFrom, double iTo);
 	double d_knapsack_size;
 	int i_items_count;
-	double ** pi_items_table;
+	double ** ppd_items_table;
 };
 

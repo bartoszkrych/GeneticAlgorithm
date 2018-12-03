@@ -5,13 +5,17 @@
 class CGeneticAlgorithm
 {
 public:
-	CGeneticAlgorithm(int iPopulationSize, double dMutationProb, double dCrossProb,CKnapsackProblem * c_knapsack_problem);
+	CGeneticAlgorithm(int iPopulationSize, double dMutationProb, double dCrossProb,CKnapsackProblem * cKnapsackProblem);
 	~CGeneticAlgorithm();
 
-	double dGetMutationProb();
-	double dGetCrossProb();
+	void vStartAlgorithm(int iIter);
+	void vGenerateNewPopulation();
 	
 private:
+	bool bMatchBestIndividual(CIndividual* cToMatch);
+	int iGenerateInteger(int iFrom, int iTo);
+	double dGenerateDouble(double dFrom, double dTo);
+
 	int i_population_size;
 	double d_mutation_prob;
 	double d_cross_prob;

@@ -17,10 +17,11 @@ CIndividual::CIndividual(CKnapsackProblem* cKnapsack)
 	}
 	vSetFitness();
 
-	d_value_gen = c_knapsack->dGetValueFromGen(&pi_genotype);
+	d_size = c_knapsack->dGetSizeFromGen(pi_genotype);
+	d_value_gen = c_knapsack->dGetValueFromGen(pi_genotype);
 }
 
-CIndividual::CIndividual(CKnapsackProblem* cKnapsack, int** piTable)
+CIndividual::CIndividual(CKnapsackProblem* cKnapsack, int* piTable)
 {
 	c_knapsack = cKnapsack;
 	i_size_genotype = c_knapsack->iGetItemsCount();
@@ -29,11 +30,12 @@ CIndividual::CIndividual(CKnapsackProblem* cKnapsack, int** piTable)
 	pi_genotype = new int[i_size_genotype];
 	for (int i = 0; i < i_size_genotype; i++)
 	{
-		pi_genotype[i] = (*piTable)[i];
+		pi_genotype[i] = piTable[i];
 	}
 	vSetFitness();
 
-	d_value_gen = c_knapsack->dGetValueFromGen(&pi_genotype);
+	d_size = c_knapsack->dGetSizeFromGen(pi_genotype);
+	d_value_gen = c_knapsack->dGetValueFromGen(pi_genotype);
 }
 
 CIndividual::~CIndividual()
@@ -41,18 +43,22 @@ CIndividual::~CIndividual()
 	delete[] pi_genotype;
 }
 
-void CIndividual::vMutation()
+void CIndividual::vMutation(double dMutationProb)
 {
-	double d_mutation_prob = 0.5;//CGeneticAlgorithm::dGetMutationProb();
 
 	for(int i = 0; i < i_size_genotype; i++)
 	{
 		double d_number = dGenerateDouble(0.0, 1.0);
-		if(!(d_number>d_mutation_prob))
+		if(!(d_number>dMutationProb))
 		{
 			pi_genotype[i] = (pi_genotype[i] + 1) % 2;
 		}
 	}
+	d_fitness = 0;
+	vSetFitness();
+	d_size = c_knapsack->dGetSizeFromGen(pi_genotype);
+	d_value_gen = c_knapsack->dGetValueFromGen(pi_genotype);
+
 }
 
 std::vector<CIndividual*> CIndividual::vCrossing(CIndividual* cSecondParent)
@@ -74,8 +80,8 @@ std::vector<CIndividual*> CIndividual::vCrossing(CIndividual* cSecondParent)
 			pi_table[1][j] = iGetGen(j);
 		}
 	}
-	v_children.push_back(new CIndividual(c_knapsack, &pi_table[0]));
-	v_children.push_back(new CIndividual(c_knapsack, &pi_table[1]));
+	v_children.push_back(new CIndividual(c_knapsack, pi_table[0]));
+	v_children.push_back(new CIndividual(c_knapsack, pi_table[1]));
 	return v_children;
 }
 
@@ -96,19 +102,19 @@ double CIndividual::dGetValueGen()
 
 void CIndividual::display()
 {
-	cout << "Fitness:	" << dGetFitness() << endl <<"Value:		" << d_value_gen<<endl<< "[";
+	cout << "Fitness:	" << d_fitness <<"	Size:		" << d_size<< "	[";
 	for (int j = 0; j < i_size_genotype - 1; j++)
 	{
 		cout << pi_genotype[j] << ",";
 	}
-	cout << pi_genotype[i_size_genotype - 1] << "]" << endl<<endl;
+	cout << pi_genotype[i_size_genotype - 1] << "]" << endl;
 }
 
 void CIndividual::vSetFitness()
 {
-	double d_fit_tmp = c_knapsack->dGetSizeFromGen(&pi_genotype);
+	double d_size = c_knapsack->dGetSizeFromGen(pi_genotype);
 
-	if (d_fit_tmp <= c_knapsack->dGetKnapsackSize()) d_fitness = d_fit_tmp;
+	if (d_size <= c_knapsack->dGetKnapsackSize()) d_fitness = c_knapsack->dGetValueFromGen(pi_genotype);
 }
 
 int CIndividual::iGenerateInteger(int iFrom, int iTo)
