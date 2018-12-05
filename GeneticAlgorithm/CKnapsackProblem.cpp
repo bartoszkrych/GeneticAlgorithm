@@ -60,7 +60,6 @@ CKnapsackProblem::~CKnapsackProblem()
 	delete[] ppd_items_table;
 }
 
-
 bool CKnapsackProblem::bSetNewValueOfItm(int iIndex, double iValue)
 {
 	if (iIndex >= d_knapsack_size || iIndex < 0) return false;
@@ -107,7 +106,7 @@ double CKnapsackProblem::dGetKnapsackSize()
 	return d_knapsack_size;
 }
 
-void CKnapsackProblem::display()
+void CKnapsackProblem::vDisplay()
 {
 	cout << "Capacity:	" << d_knapsack_size << endl <<"Count of items:	"<< i_items_count<<endl<<endl << "i|v	|s"<<endl;
 		for (int j = 0; j < i_items_count; j++)

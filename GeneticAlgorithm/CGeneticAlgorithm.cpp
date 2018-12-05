@@ -2,7 +2,6 @@
 #include <random>
 #include <iostream>
 
-
 CGeneticAlgorithm::CGeneticAlgorithm(int iPopulationSize, double dMutationProb, double dCrossProb,CKnapsackProblem *cKnapsackProblem)
 {
 	i_population_size = iPopulationSize;
@@ -48,9 +47,9 @@ void CGeneticAlgorithm::vStartAlgorithm(int iIter)
 	std::cout << "###	POP	###" << std::endl;
 	for (int i = 0; i < i_population_size; i++)
 	{
-		ppc_tab_population[i]->display();
+		ppc_tab_population[i]->vDisplay();
 	}
-	std::cout << "THE BEST IS: "<< std::endl; pc_best_individual->display();
+	std::cout << "THE BEST IS: "<< std::endl; pc_best_individual->vDisplay();
 
 }//CGeneticAlgorithm::vGeneratePopulation(int iIter)
 
@@ -59,7 +58,7 @@ void CGeneticAlgorithm::vGenerateNewPopulation()
 	std::cout << "###	POP	###"<< std::endl;
 	for (int i = 0; i < i_population_size; i++)
 	{
-		ppc_tab_population[i]->display();
+		ppc_tab_population[i]->vDisplay();
 	}
 	int i_random_number1;
 	int i_random_number2;
@@ -95,16 +94,17 @@ void CGeneticAlgorithm::vGenerateNewPopulation()
 
 		if (d_crossing <= d_cross_prob)
 		{
-			std::vector <CIndividual*> children = ppc_tab_population[pi_parents[0]]->vCrossing(ppc_tab_population[pi_parents[1]]);
-			children[0]->vMutation(d_mutation_prob);
-			pc_new_population[i_children_count++] = children[0];
-			if(i_children_count==i_population_size)
+			std::vector <CIndividual*> v_children = ppc_tab_population[pi_parents[0]]->vCrossing(ppc_tab_population[pi_parents[1]]);
+			v_children[0]->vMutation(d_mutation_prob);
+			pc_new_population[i_children_count++] = v_children[0];
+			if (i_children_count == i_population_size)
 			{
-				delete children[1];
-			}else
+				delete v_children[1];
+			}
+			else
 			{
-				children[1]->vMutation(d_mutation_prob);
-				pc_new_population[i_children_count++] = children[1];
+				v_children[1]->vMutation(d_mutation_prob);
+				pc_new_population[i_children_count++] = v_children[1];
 			}//if(i_children_count==i_population_size)
 		}//if (d_crossing <= d_cross_prob)
 		delete[] pi_parents;
@@ -120,7 +120,9 @@ void CGeneticAlgorithm::vGenerateNewPopulation()
 		if (ppc_tab_population[i] != pc_best_individual)
 			delete ppc_tab_population[i];
 	}
+
 	delete[] ppc_tab_population;
+	
 	ppc_tab_population = NULL;
 	ppc_tab_population = pc_new_population;
 

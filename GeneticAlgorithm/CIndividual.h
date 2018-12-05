@@ -16,18 +16,17 @@ public:
 	int iGetGen(int iIndex);
 	double dGetValueGen();
 
-	void display();
-
+	void vDisplay();
 private:
 	void vSetFitness();
 	int iGenerateInteger(int iFrom, int iTo);
 	double dGenerateDouble(double dFrom, double dTo);
 
 	int * pi_genotype;
-	int i_size_genotype;
+	int i_count_gen;
 	double d_fitness;
 	double d_value_gen;
-	double d_size;
+	double d_size_gen;
 
 	CKnapsackProblem* c_knapsack;
 };
