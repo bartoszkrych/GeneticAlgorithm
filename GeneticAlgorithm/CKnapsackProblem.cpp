@@ -10,16 +10,10 @@ using namespace std;
 
 CKnapsackProblem::CKnapsackProblem()
 {
-	d_knapsack_size = DEFAULT_KNAPSACK;
-	i_items_count = DEFAULT_SIZE;
+	d_knapsack_size = 0;
+	i_items_count = 0;
 
-	ppd_items_table = new double*[i_items_count];
-	for (int i = 0; i < i_items_count; i++)
-	{
-		ppd_items_table[i] = new double[2];
-		ppd_items_table[i][0] = dGenerateDouble(0.01, DEFAULT_VALUES);
-		ppd_items_table[i][1] = dGenerateDouble(0.01, DEFAULT_VALUES);
-	}
+	ppd_items_table = NULL;
 }
 
 CKnapsackProblem::CKnapsackProblem(double dKnapsackSize, int iItemsCount, double dMaxValueItm, double dMaxSizeItm)
@@ -58,6 +52,48 @@ CKnapsackProblem::~CKnapsackProblem()
 	}
 
 	delete[] ppd_items_table;
+}
+
+bool CKnapsackProblem::bInitialObject(double dKnapsackSize, int iItemsCount, double dMaxValueItm, double dMaxSizeItm)
+{
+	if(dMaxSizeItm >= 0.01
+		&& dMaxValueItm >= 0
+		&& iItemsCount > 0
+		&& dKnapsackSize > 0)
+	{
+		d_knapsack_size = dKnapsackSize;
+		i_items_count = iItemsCount;
+
+		ppd_items_table = new double*[i_items_count];
+		for (int i = 0; i < i_items_count; i++)
+		{
+			ppd_items_table[i] = new double[2];
+			ppd_items_table[i][0] = dGenerateDouble(0.01, dMaxValueItm);
+			ppd_items_table[i][1] = dGenerateDouble(0.01, dMaxSizeItm);
+		}
+		return true;
+	}
+	return false;
+}
+
+bool CKnapsackProblem::bInitialObject(double dKnapsackSize, int iItemsCount)
+{
+	if ( iItemsCount > 0
+		&& dKnapsackSize > 0)
+	{
+		d_knapsack_size = dKnapsackSize;
+		i_items_count = iItemsCount;
+
+		ppd_items_table = new double*[i_items_count];
+		for (int i = 0; i < i_items_count; i++)
+		{
+			ppd_items_table[i] = new double[2];
+			ppd_items_table[i][0] = dGenerateDouble(0.01, DEFAULT_VALUES);
+			ppd_items_table[i][1] = dGenerateDouble(0.01, DEFAULT_VALUES);
+		}
+		return true;
+	}
+	return  false;
 }
 
 bool CKnapsackProblem::bSetNewValueOfItm(int iIndex, double iValue)
