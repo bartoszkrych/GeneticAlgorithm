@@ -91,6 +91,50 @@ std::vector<CIndividual*> CIndividual::vCrossing(CIndividual* cSecondParent)
 	return v_children;
 }
 
+CIndividual& CIndividual::operator+(CIndividual& pcOther)
+{
+
+	int i_index_part = iGenerateInteger(1, i_count_gen - 1);
+	int ** pi_table = new int*[2];
+	pi_table[0] = new int[i_count_gen];
+	pi_table[1] = new int[i_count_gen];
+	for (int j = 0; j < i_count_gen; j++)
+	{
+		if (j < i_index_part)
+		{
+			pi_table[0][j] = iGetGen(j);
+			pi_table[1][j] = pcOther.iGetGen(j);
+		}
+		else
+		{
+			pi_table[0][j] = pcOther.iGetGen(j);
+			pi_table[1][j] = iGetGen(j);
+		}
+	}
+	CIndividual* c_first = new CIndividual(c_knapsack, pi_table[0]);
+	CIndividual* c_sec = new CIndividual(c_knapsack, pi_table[1]);
+
+	CIndividual* child;
+
+	if (c_first->dGetFitness() > c_sec->dGetFitness())
+	{
+		child = c_first;
+		delete c_sec;
+	}
+	else{
+		child = c_sec;
+		delete c_first;
+	}
+
+	for (int i = 0; i < 2; i++)
+	{
+		delete[] pi_table[i];
+	}
+	delete[] pi_table;
+
+	return  *child;
+}
+
 double CIndividual::dGetFitness()
 {
 	return d_fitness;
@@ -140,58 +184,4 @@ double CIndividual::dGenerateDouble(double dFrom, double dTo)
 
 	return dis(gen);
 }
-
-/*
- *
- * 	CIndividual& operator+(CIndividual & pcOther); 
-CIndividual& CIndividual::operator+(CIndividual& pcOther)
-{
-
-	int i_index_part = iGenerateInteger(1, i_count_gen - 1);
-	int ** pi_table = new int*[2];
-	pi_table[0] = new int[i_count_gen];
-	pi_table[1] = new int[i_count_gen];
-	for (int j = 0; j < i_count_gen; j++)
-	{
-		if (j < i_index_part)
-		{
-			pi_table[0][j] = iGetGen(j);
-			pi_table[1][j] = pcOther.iGetGen(j);
-		}
-		else
-		{
-			pi_table[0][j] = pcOther.iGetGen(j);
-			pi_table[1][j] = iGetGen(j);
-		}
-	}
-	CIndividual* c_first = new CIndividual(c_knapsack, pi_table[0]);
-	CIndividual* c_sec = new CIndividual(c_knapsack, pi_table[1]);
-
-	CIndividual* child;
-
-	if (c_first->dGetFitness() > c_sec->dGetFitness())
-	{
-		child = c_first;
-		delete c_sec;
-	}
-	else
-	{
-		child = c_sec;
-		delete c_first;
-	}
-	for (int i = 0; i < 2; i++)
-	{
-		delete[] pi_table[i];
-	}
-	delete[] pi_table;
-
-	return  *child;
-}
-
-
-				CIndividual * c_child = &((*ppc_tab_population[pi_parents[0]]) + *ppc_tab_population[pi_parents[1]]);
-				c_child->vMutation(d_mutation_prob);
-				pc_new_population[i_children_count++] = c_child;
-
- */
 

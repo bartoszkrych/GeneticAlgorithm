@@ -12,6 +12,8 @@ public:
 	void vMutation(double dMutationProb);
 	std::vector<CIndividual*> vCrossing(CIndividual* cSecondParent);
 
+	CIndividual& operator+(CIndividual & pcOther);
+
 	double dGetFitness();
 	int iGetGen(int iIndex);
 	double dGetValueGen();

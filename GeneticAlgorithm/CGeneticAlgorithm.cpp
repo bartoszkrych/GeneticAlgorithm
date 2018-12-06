@@ -49,12 +49,14 @@ CGeneticAlgorithm::~CGeneticAlgorithm()
 }
 
 bool CGeneticAlgorithm::bInitialObject(int iPopulationSize, double dMutationProb, double dCrossProb,
-	CKnapsackProblem* cKnapsackProblem)
+	CKnapsackProblem* cKnapsackProblem, double dCoefficient)
 {
 	if(dMutationProb >= 0
 		&& dMutationProb <= 1
 		&& dCrossProb >= 0
 		&& dCrossProb <= 1
+		&& dCoefficient >= 0
+		&& dCoefficient <= 1
 		&& iPopulationSize > 1)
 	{
 		i_population_size = iPopulationSize;
@@ -62,7 +64,6 @@ bool CGeneticAlgorithm::bInitialObject(int iPopulationSize, double dMutationProb
 		d_cross_prob = dCrossProb;
 		pc_knapsack_problem = cKnapsackProblem;
 		ppc_tab_population = new CIndividual*[i_population_size];
-
 		for (int i = 0; i < i_population_size; i++)
 		{
 			ppc_tab_population[i] = new CIndividual(pc_knapsack_problem);
@@ -86,7 +87,7 @@ bool CGeneticAlgorithm::bInitialObject(int iPopulationSize, double dMutationProb
 void CGeneticAlgorithm::vStartAlgorithm(int iIter)
 {
 	int i_iter_population = 0;
-	while(i_iter_population!=iIter)
+	while (i_iter_population != iIter)
 	{
 		vGenerateNewPopulation();
 		i_iter_population++;
@@ -98,7 +99,7 @@ void CGeneticAlgorithm::vStartAlgorithm(int iIter)
 		ppc_tab_population[i]->vDisplay();
 	}
 
-	std::cout << "THE BEST IS: "<< std::endl; pc_best_individual->vDisplay();
+	std::cout << "THE BEST IS: " << std::endl; pc_best_individual->vDisplay();
 }//CGeneticAlgorithm::vGeneratePopulation(int iIter)
 
 void CGeneticAlgorithm::vGenerateNewPopulation()
