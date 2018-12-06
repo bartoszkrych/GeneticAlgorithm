@@ -4,9 +4,10 @@
 #include <iostream>
 using namespace std;
 
-CIndividual::CIndividual(CKnapsackProblem* cKnapsack)
+CIndividual::CIndividual(CKnapsackProblem* cKnapsack, CGeneticAlgorithm* cGA)
 {
 	c_knapsack = cKnapsack;
+	c_ga = cGA;
 	i_count_gen = c_knapsack->iGetItemsCount();
 	d_fitness = 0;
 
@@ -21,9 +22,10 @@ CIndividual::CIndividual(CKnapsackProblem* cKnapsack)
 	d_value_gen = c_knapsack->dGetValueFromGen(pi_genotype);
 }
 
-CIndividual::CIndividual(CKnapsackProblem* cKnapsack, int* piTable)
+CIndividual::CIndividual(CKnapsackProblem* cKnapsack,CGeneticAlgorithm* cGA , int* piTable)
 {
 	c_knapsack = cKnapsack;
+	c_ga = cGA;
 	i_count_gen = c_knapsack->iGetItemsCount();
 	d_fitness = 0;
 
@@ -45,7 +47,6 @@ CIndividual::~CIndividual()
 
 void CIndividual::vMutation(double dMutationProb)
 {
-
 	for(int i = 0; i < i_count_gen; i++)
 	{
 		double d_number = dGenerateDouble(0.0, 1.0);
@@ -80,8 +81,8 @@ std::vector<CIndividual*> CIndividual::vCrossing(CIndividual* cSecondParent)
 			pi_table[1][j] = iGetGen(j);
 		}
 	}
-	v_children.push_back(new CIndividual(c_knapsack, pi_table[0]));
-	v_children.push_back(new CIndividual(c_knapsack, pi_table[1]));
+	v_children.push_back(new CIndividual(c_knapsack, c_ga, pi_table[0]));
+	v_children.push_back(new CIndividual(c_knapsack, c_ga, pi_table[1]));
 
 	for(int i = 0; i < 2; i++)
 	{
@@ -111,8 +112,8 @@ CIndividual& CIndividual::operator+(CIndividual& pcOther)
 			pi_table[1][j] = iGetGen(j);
 		}
 	}
-	CIndividual* c_first = new CIndividual(c_knapsack, pi_table[0]);
-	CIndividual* c_sec = new CIndividual(c_knapsack, pi_table[1]);
+	CIndividual* c_first = new CIndividual(c_knapsack, c_ga, pi_table[0]);
+	CIndividual* c_sec = new CIndividual(c_knapsack, c_ga, pi_table[1]);
 
 	CIndividual* child;
 
@@ -133,6 +134,22 @@ CIndividual& CIndividual::operator+(CIndividual& pcOther)
 	delete[] pi_table;
 
 	return  *child;
+}
+
+void CIndividual::operator++()
+{
+	for (int i = 0; i < i_count_gen; i++)
+	{
+		double d_number = dGenerateDouble(0.0, 1.0);
+		if (!(d_number > c_ga->dGetMutationProb()))
+		{
+			pi_genotype[i] = (pi_genotype[i] + 1) % 2;
+		}
+	}
+	d_fitness = 0;
+	vSetFitness();
+	d_size_gen = c_knapsack->dGetSizeFromGen(pi_genotype);
+	d_value_gen = c_knapsack->dGetValueFromGen(pi_genotype);
 }
 
 double CIndividual::dGetFitness()

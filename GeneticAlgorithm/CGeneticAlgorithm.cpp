@@ -185,6 +185,11 @@ void CGeneticAlgorithm::vGenerateNewPopulation()
 	bMatchBestIndividual(ppc_tab_population[i_index_best]);
 }
 
+double CGeneticAlgorithm::dGetMutationProb()
+{
+	return d_mutation_prob;
+}
+
 bool CGeneticAlgorithm::bMatchBestIndividual(CIndividual* cToMatch)
 {
 	if(cToMatch->dGetFitness()>pc_best_individual->dGetFitness())

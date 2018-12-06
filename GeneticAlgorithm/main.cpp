@@ -2,10 +2,10 @@
 #include <random>
 #include "CKnapsackProblem.h"
 #include "CGeneticAlgorithm.h"
-
+#define _CRTDBG_MAP_ALLOC
+#include <stdlib.h>  
+#include <crtdbg.h>
 using namespace std;
-
-
 
 int main()
 {
@@ -47,6 +47,8 @@ int main()
 	} //ELSE if(c_knap->bInitialObject(d_capacity_knap, i_item_count, d_item_max_value, d_item_max_size))
 
 	delete c_knap;
+
+	_CrtDumpMemoryLeaks();
 	system("pause");
 	
 	return 0;

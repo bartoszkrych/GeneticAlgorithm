@@ -12,6 +12,7 @@ public:
 	bool bInitialObject(int iPopulationSize, double dMutationProb, double dCrossProb, CKnapsackProblem * cKnapsackProblem, double dCoefficient);
 	void vStartAlgorithm(int iIter);
 	void vGenerateNewPopulation();
+	double dGetMutationProb();
 	
 private:
 	bool bMatchBestIndividual(CIndividual* cToMatch);
