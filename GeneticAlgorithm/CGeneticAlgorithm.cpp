@@ -1,6 +1,7 @@
 #include "CGeneticAlgorithm.h"
 #include <random>
 #include <iostream>
+#include <chrono>
 
 
 CGeneticAlgorithm::CGeneticAlgorithm()
@@ -67,6 +68,7 @@ bool CGeneticAlgorithm::bInitialObject(int iPopulationSize, double dMutationProb
 		for (int i = 0; i < i_population_size; i++)
 		{
 			ppc_tab_population[i] = new CIndividual(pc_knapsack_problem);
+			ppc_tab_population[i]->vAddAlg(this);
 		}
 
 		pc_best_individual = ppc_tab_population[0];
@@ -143,19 +145,9 @@ void CGeneticAlgorithm::vGenerateNewPopulation()
 
 		if (d_crossing <= d_cross_prob)
 		{
-			std::vector <CIndividual*> v_children = ppc_tab_population[pi_parents[0]]->vCrossing(ppc_tab_population[pi_parents[1]]);
-			v_children[0]->vMutation(d_mutation_prob);
-			pc_new_population[i_children_count++] = v_children[0];
-
-			if (i_children_count == i_population_size)
-			{
-				delete v_children[1];
-			}
-			else
-			{
-				v_children[1]->vMutation(d_mutation_prob);
-				pc_new_population[i_children_count++] = v_children[1];
-			}//if(i_children_count==i_population_size)
+			CIndividual* c_child = &(*(ppc_tab_population[pi_parents[0]])+*ppc_tab_population[pi_parents[1]]);
+			c_child++;
+			pc_new_population[i_children_count++] = c_child;
 		}//if (d_crossing <= d_cross_prob)
 
 		delete[] pi_parents;

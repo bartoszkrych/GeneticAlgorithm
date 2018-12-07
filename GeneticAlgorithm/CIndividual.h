@@ -6,10 +6,11 @@
 class CIndividual
 {
 public:
-	CIndividual(CKnapsackProblem* cKnapsack,CGeneticAlgorithm* cGA);
-	CIndividual(CKnapsackProblem* cKnapsack, CGeneticAlgorithm* cGA , int * piTable);
+	CIndividual(CKnapsackProblem* cKnapsack);
+	CIndividual(CKnapsackProblem* cKnapsack,int * piTable);
 	~CIndividual();
 
+	void vAddAlg(CGeneticAlgorithm* cGeneticA);
 	void vMutation(double dMutationProb);
 	std::vector<CIndividual*> vCrossing(CIndividual* cSecondParent);
 
@@ -31,8 +32,8 @@ private:
 	double d_fitness;
 	double d_value_gen;
 	double d_size_gen;
-
 	CGeneticAlgorithm* c_ga;
+
 	CKnapsackProblem* c_knapsack;
 };
 

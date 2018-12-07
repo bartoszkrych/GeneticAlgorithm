@@ -4,10 +4,10 @@
 #include <iostream>
 using namespace std;
 
-CIndividual::CIndividual(CKnapsackProblem* cKnapsack, CGeneticAlgorithm* cGA)
+CIndividual::CIndividual(CKnapsackProblem* cKnapsack)
 {
 	c_knapsack = cKnapsack;
-	c_ga = cGA;
+	c_ga = NULL;
 	i_count_gen = c_knapsack->iGetItemsCount();
 	d_fitness = 0;
 
@@ -22,10 +22,10 @@ CIndividual::CIndividual(CKnapsackProblem* cKnapsack, CGeneticAlgorithm* cGA)
 	d_value_gen = c_knapsack->dGetValueFromGen(pi_genotype);
 }
 
-CIndividual::CIndividual(CKnapsackProblem* cKnapsack,CGeneticAlgorithm* cGA , int* piTable)
+CIndividual::CIndividual(CKnapsackProblem* cKnapsack, int* piTable)
 {
 	c_knapsack = cKnapsack;
-	c_ga = cGA;
+	c_ga = NULL;
 	i_count_gen = c_knapsack->iGetItemsCount();
 	d_fitness = 0;
 
@@ -43,6 +43,11 @@ CIndividual::CIndividual(CKnapsackProblem* cKnapsack,CGeneticAlgorithm* cGA , in
 CIndividual::~CIndividual()
 {
 	delete[] pi_genotype;
+}
+
+void CIndividual::vAddAlg(CGeneticAlgorithm* cGeneticA)
+{
+	c_ga = cGeneticA;
 }
 
 void CIndividual::vMutation(double dMutationProb)
@@ -112,8 +117,8 @@ CIndividual& CIndividual::operator+(CIndividual& pcOther)
 			pi_table[1][j] = iGetGen(j);
 		}
 	}
-	CIndividual* c_first = new CIndividual(c_knapsack, c_ga, pi_table[0]);
-	CIndividual* c_sec = new CIndividual(c_knapsack, c_ga, pi_table[1]);
+	CIndividual* c_first = new CIndividual(c_knapsack, pi_table[0]);
+	CIndividual* c_sec = new CIndividual(c_knapsack, pi_table[1]);
 
 	CIndividual* child;
 
@@ -133,6 +138,7 @@ CIndividual& CIndividual::operator+(CIndividual& pcOther)
 	}
 	delete[] pi_table;
 
+	child->vAddAlg(c_ga);
 	return  *child;
 }
 
