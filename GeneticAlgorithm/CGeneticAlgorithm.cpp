@@ -14,29 +14,6 @@ CGeneticAlgorithm::CGeneticAlgorithm()
 	pc_best_individual = NULL;
 }
 
-CGeneticAlgorithm::CGeneticAlgorithm(int iPopulationSize, double dMutationProb, double dCrossProb,CKnapsackProblem *cKnapsackProblem)
-{
-	i_population_size = iPopulationSize;
-	d_mutation_prob = dMutationProb;
-	d_cross_prob = dCrossProb;
-	pc_knapsack_problem = cKnapsackProblem;
-	ppc_tab_population = new CIndividual*[i_population_size];
-
-	for (int i = 0; i < i_population_size; i++)
-	{
-		ppc_tab_population[i] = new CIndividual(pc_knapsack_problem);
-	}
-
-	pc_best_individual = ppc_tab_population[0];
-	for(int i = 1 ; i < i_population_size;i++)
-	{
-		if(ppc_tab_population[i]->dGetFitness()>pc_best_individual->dGetFitness())
-		{
-			pc_best_individual = ppc_tab_population[i];
-		}//	for(int i = 1 ; i < i_population_size;i++)
-	}
-}//CGeneticAlgorithm::CGeneticAlgorithm(int iPopulationSize, double dMutationProb, double dCrossProb,CKnapsackProblem *cKnapsackProblem)
-
 CGeneticAlgorithm::~CGeneticAlgorithm()
 {
 	for (int i = 0; i<i_population_size; i++)
@@ -67,8 +44,8 @@ bool CGeneticAlgorithm::bInitialObject(int iPopulationSize, double dMutationProb
 		ppc_tab_population = new CIndividual*[i_population_size];
 		for (int i = 0; i < i_population_size; i++)
 		{
-			ppc_tab_population[i] = new CIndividual(pc_knapsack_problem);
-			ppc_tab_population[i]->vAddAlg(this);
+			ppc_tab_population[i] = new CIndividual(pc_knapsack_problem, d_mutation_prob);
+			//ppc_tab_population[i]->vAddAlg(this);
 		}
 
 		pc_best_individual = ppc_tab_population[0];
@@ -145,9 +122,11 @@ void CGeneticAlgorithm::vGenerateNewPopulation()
 
 		if (d_crossing <= d_cross_prob)
 		{
-			CIndividual* c_child = &(*(ppc_tab_population[pi_parents[0]])+*ppc_tab_population[pi_parents[1]]);
-			c_child++;
+			CIndividual* c_child = (*ppc_tab_population[pi_parents[0]])+ppc_tab_population[pi_parents[1]];
+			CIndividual & rc_child = *c_child;
+			rc_child++;
 			pc_new_population[i_children_count++] = c_child;
+
 		}//if (d_crossing <= d_cross_prob)
 
 		delete[] pi_parents;
@@ -210,4 +189,3 @@ double CGeneticAlgorithm::dGenerateDouble(double dFrom, double dTo)
 
 	return dis(gen);
 }
-

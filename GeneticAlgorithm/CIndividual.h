@@ -1,21 +1,21 @@
 #pragma once
 #include "CKnapsackProblem.h"
 #include <vector>
-#include "CGeneticAlgorithm.h"
 
 class CIndividual
 {
 public:
-	CIndividual(CKnapsackProblem* cKnapsack);
-	CIndividual(CKnapsackProblem* cKnapsack,int * piTable);
+	CIndividual(CKnapsackProblem* cKnapsack, double dMutationProb);
+	CIndividual(CKnapsackProblem* cKnapsack, double dMutationProb, int * piTable);
 	~CIndividual();
 
-	void vAddAlg(CGeneticAlgorithm* cGeneticA);
 	void vMutation(double dMutationProb);
 	std::vector<CIndividual*> vCrossing(CIndividual* cSecondParent);
 
-	CIndividual& operator+(CIndividual & pcOther);
-	void operator++();
+	CIndividual* operator+(CIndividual * pcOther);
+	CIndividual* operator=(CIndividual * pcOther);
+	void operator++(int);
+	
 
 	double dGetFitness();
 	int iGetGen(int iIndex);
@@ -32,7 +32,7 @@ private:
 	double d_fitness;
 	double d_value_gen;
 	double d_size_gen;
-	CGeneticAlgorithm* c_ga;
+	double d_mutation_prob;
 
 	CKnapsackProblem* c_knapsack;
 };

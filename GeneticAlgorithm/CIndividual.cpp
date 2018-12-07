@@ -4,17 +4,18 @@
 #include <iostream>
 using namespace std;
 
-CIndividual::CIndividual(CKnapsackProblem* cKnapsack)
+
+CIndividual::CIndividual(CKnapsackProblem* cKnapsack, double dMutationProb)
 {
 	c_knapsack = cKnapsack;
-	c_ga = NULL;
 	i_count_gen = c_knapsack->iGetItemsCount();
+	d_mutation_prob = dMutationProb;
 	d_fitness = 0;
 
-	pi_genotype = new int [i_count_gen];
+	pi_genotype = new int[i_count_gen];
 	for (int i = 0; i < i_count_gen; i++)
 	{
-		pi_genotype[i] =  iGenerateInteger(0,1);
+		pi_genotype[i] = iGenerateInteger(0, 1);
 	}
 	vSetFitness();
 
@@ -22,11 +23,11 @@ CIndividual::CIndividual(CKnapsackProblem* cKnapsack)
 	d_value_gen = c_knapsack->dGetValueFromGen(pi_genotype);
 }
 
-CIndividual::CIndividual(CKnapsackProblem* cKnapsack, int* piTable)
+CIndividual::CIndividual(CKnapsackProblem* cKnapsack, double dMutationProb, int* piTable)
 {
 	c_knapsack = cKnapsack;
-	c_ga = NULL;
 	i_count_gen = c_knapsack->iGetItemsCount();
+	d_mutation_prob = dMutationProb;
 	d_fitness = 0;
 
 	pi_genotype = new int[i_count_gen];
@@ -43,11 +44,6 @@ CIndividual::CIndividual(CKnapsackProblem* cKnapsack, int* piTable)
 CIndividual::~CIndividual()
 {
 	delete[] pi_genotype;
-}
-
-void CIndividual::vAddAlg(CGeneticAlgorithm* cGeneticA)
-{
-	c_ga = cGeneticA;
 }
 
 void CIndividual::vMutation(double dMutationProb)
@@ -86,8 +82,8 @@ std::vector<CIndividual*> CIndividual::vCrossing(CIndividual* cSecondParent)
 			pi_table[1][j] = iGetGen(j);
 		}
 	}
-	v_children.push_back(new CIndividual(c_knapsack, c_ga, pi_table[0]));
-	v_children.push_back(new CIndividual(c_knapsack, c_ga, pi_table[1]));
+	v_children.push_back(new CIndividual(c_knapsack, d_mutation_prob, pi_table[0]));
+	v_children.push_back(new CIndividual(c_knapsack, d_mutation_prob, pi_table[1]));
 
 	for(int i = 0; i < 2; i++)
 	{
@@ -97,7 +93,7 @@ std::vector<CIndividual*> CIndividual::vCrossing(CIndividual* cSecondParent)
 	return v_children;
 }
 
-CIndividual& CIndividual::operator+(CIndividual& pcOther)
+CIndividual* CIndividual::operator+(CIndividual* pcOther)
 {
 
 	int i_index_part = iGenerateInteger(1, i_count_gen - 1);
@@ -109,16 +105,16 @@ CIndividual& CIndividual::operator+(CIndividual& pcOther)
 		if (j < i_index_part)
 		{
 			pi_table[0][j] = iGetGen(j);
-			pi_table[1][j] = pcOther.iGetGen(j);
+			pi_table[1][j] = pcOther->iGetGen(j);
 		}
 		else
 		{
-			pi_table[0][j] = pcOther.iGetGen(j);
+			pi_table[0][j] = pcOther->iGetGen(j);
 			pi_table[1][j] = iGetGen(j);
 		}
 	}
-	CIndividual* c_first = new CIndividual(c_knapsack, pi_table[0]);
-	CIndividual* c_sec = new CIndividual(c_knapsack, pi_table[1]);
+	CIndividual* c_first = new CIndividual(c_knapsack, d_mutation_prob, pi_table[0]);
+	CIndividual* c_sec = new CIndividual(c_knapsack, d_mutation_prob, pi_table[1]);
 
 	CIndividual* child;
 
@@ -137,17 +133,15 @@ CIndividual& CIndividual::operator+(CIndividual& pcOther)
 		delete[] pi_table[i];
 	}
 	delete[] pi_table;
-
-	child->vAddAlg(c_ga);
-	return  *child;
+	return  child;
 }
 
-void CIndividual::operator++()
+void CIndividual::operator++(int)
 {
 	for (int i = 0; i < i_count_gen; i++)
 	{
 		double d_number = dGenerateDouble(0.0, 1.0);
-		if (!(d_number > c_ga->dGetMutationProb()))
+		if (!(d_number > d_mutation_prob))
 		{
 			pi_genotype[i] = (pi_genotype[i] + 1) % 2;
 		}

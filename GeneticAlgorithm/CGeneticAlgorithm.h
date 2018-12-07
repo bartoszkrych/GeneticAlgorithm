@@ -6,7 +6,6 @@ class CGeneticAlgorithm
 {
 public:
 	CGeneticAlgorithm();
-	CGeneticAlgorithm(int iPopulationSize, double dMutationProb, double dCrossProb,CKnapsackProblem * cKnapsackProblem);
 	~CGeneticAlgorithm();
 
 	bool bInitialObject(int iPopulationSize, double dMutationProb, double dCrossProb, CKnapsackProblem * cKnapsackProblem, double dCoefficient);
