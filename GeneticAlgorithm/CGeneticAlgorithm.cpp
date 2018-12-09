@@ -27,14 +27,12 @@ CGeneticAlgorithm::~CGeneticAlgorithm()
 }
 
 bool CGeneticAlgorithm::bInitialObject(int iPopulationSize, double dMutationProb, double dCrossProb,
-	CKnapsackProblem* cKnapsackProblem, double dCoefficient)
+	CKnapsackProblem* cKnapsackProblem)
 {
 	if(dMutationProb >= 0
 		&& dMutationProb <= 1
 		&& dCrossProb >= 0
 		&& dCrossProb <= 1
-		&& dCoefficient >= 0
-		&& dCoefficient <= 1
 		&& iPopulationSize > 1)
 	{
 		i_population_size = iPopulationSize;
@@ -63,22 +61,22 @@ bool CGeneticAlgorithm::bInitialObject(int iPopulationSize, double dMutationProb
 	return false;
 }
 
-void CGeneticAlgorithm::vStartAlgorithm(int iIter)
+void CGeneticAlgorithm::vStartAlgorithm(double dTime)
 {
 	int i_iter_population = 0;
-	while (i_iter_population != iIter)
+	clock_t start = clock();
+	while (((double)clock() - start)/ CLOCKS_PER_SEC <dTime )
 	{
 		vGenerateNewPopulation();
 		i_iter_population++;
 	}
-
 	std::cout << "###	LAST POP	###" << std::endl;
 	for (int i = 0; i < i_population_size; i++)
 	{
 		ppc_tab_population[i]->vDisplay();
 	}
 
-	std::cout << "THE BEST IS: " << std::endl; pc_best_individual->vDisplay();
+	std::cout <<i_iter_population <<"THE BEST IS: " << std::endl; pc_best_individual->vDisplay();
 }//CGeneticAlgorithm::vGeneratePopulation(int iIter)
 
 void CGeneticAlgorithm::vGenerateNewPopulation()
@@ -123,8 +121,9 @@ void CGeneticAlgorithm::vGenerateNewPopulation()
 		if (d_crossing <= d_cross_prob)
 		{
 			CIndividual* c_child = (*ppc_tab_population[pi_parents[0]])+ppc_tab_population[pi_parents[1]];
-			CIndividual & rc_child = *c_child;
-			rc_child++;
+			//CIndividual & rc_child = *c_child;
+			//rc_child++;
+			(*c_child)++;
 			pc_new_population[i_children_count++] = c_child;
 
 		}//if (d_crossing <= d_cross_prob)

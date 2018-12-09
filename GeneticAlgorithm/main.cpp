@@ -13,8 +13,7 @@ int main()
 	double d_cross_prob = 0.6;
 	double d_mutation_prob = 0.2;
 
-	double d_coefficient = 0.9;
-
+	double d_seconds=2;
 	double d_capacity_knap = 5.32;
 	int i_item_count = 5;
 	double d_item_max_value = 5.81;
@@ -27,11 +26,11 @@ int main()
 	{
 		CGeneticAlgorithm * c_ga = new CGeneticAlgorithm();
 
-		if(c_ga->bInitialObject(i_population_size, d_mutation_prob, d_cross_prob, c_knap, d_coefficient))
+		if(c_ga->bInitialObject(i_population_size, d_mutation_prob, d_cross_prob, c_knap))
 		{
 			c_knap->vDisplay();
 			//c_ga->vGenerateNewPopulation();
-			c_ga->vStartAlgorithm(10);
+			c_ga->vStartAlgorithm(d_seconds);
 
 			delete c_ga;
 		}

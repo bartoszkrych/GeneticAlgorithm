@@ -8,8 +8,8 @@ public:
 	CGeneticAlgorithm();
 	~CGeneticAlgorithm();
 
-	bool bInitialObject(int iPopulationSize, double dMutationProb, double dCrossProb, CKnapsackProblem * cKnapsackProblem, double dCoefficient);
-	void vStartAlgorithm(int iIter);
+	bool bInitialObject(int iPopulationSize, double dMutationProb, double dCrossProb, CKnapsackProblem * cKnapsackProblem);
+	void vStartAlgorithm(double dTime);
 	void vGenerateNewPopulation();
 	double dGetMutationProb();
 	

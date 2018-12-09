@@ -13,7 +13,6 @@ public:
 	std::vector<CIndividual*> vCrossing(CIndividual* cSecondParent);
 
 	CIndividual* operator+(CIndividual * pcOther);
-	CIndividual* operator=(CIndividual * pcOther);
 	void operator++(int);
 	
 
